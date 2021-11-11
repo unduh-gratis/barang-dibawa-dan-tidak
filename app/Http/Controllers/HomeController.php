@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\RequiredProduct;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
@@ -23,6 +26,12 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $user = Auth::user();
+        // dd($user->products()->pluck('product_id'));
+        return view('home', [
+            'required_products' => RequiredProduct::with('product')->get(),
+            'products' => $user->products,
+            'absen' => RequiredProduct::whereNotIn('product_id', $user->products()->pluck('product_id'))->get(),
+        ]);
     }
 }
