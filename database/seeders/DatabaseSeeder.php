@@ -2,6 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\RequiredProduct;
+use App\Models\User;
+use App\Models\UserProduct;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -16,15 +19,21 @@ class DatabaseSeeder extends Seeder
         \App\Models\User::factory(10)->create();
         \App\Models\Product::factory(100)->create();
 
-        $users = \App\Models\User::all();
+        $users = User::all();
         foreach ($users as $user) {
-            for ($i=0; $i < 10; $i++) {
-                \App\Models\UserProduct::create([
+            for ($i=1; $i <= 5; $i++) {
+                UserProduct::create([
                     'user_id' => $user->id,
-                    'product_id' => random_int(1, 100),
+                    'product_id' => $i,
                     'tanggal' => now()
                 ]);
             }
+        }
+
+        for ($i=1; $i <= 10; $i++) {
+            RequiredProduct::create([
+                'product_id' => $i
+            ]);
         }
     }
 }
